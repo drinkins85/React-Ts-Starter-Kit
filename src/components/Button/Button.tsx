@@ -1,4 +1,6 @@
 import * as React from 'react';
+import './Button.scss'
+import TimePic from './assets/time.png';
 
 type TitleProps = {
     title: string;
@@ -19,11 +21,12 @@ function Button({ title, color, size }: TitleProps): JSX.Element {
     return (
         <button
             type="button"
-            className="Title"
+            className="Button"
             onClick={onTitleClick}
             style={styles}
         >
             {title}
+            <img src={TimePic} className="Title-Image" alt="" />
         </button>
     );
 }

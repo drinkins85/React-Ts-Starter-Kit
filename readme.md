@@ -107,7 +107,6 @@ function Button({ title, color, size }: TitleProps): JSX.Element {
     return (
         <button
             type="button"
-            className="Title"
             onClick={onTitleClick}
             style={styles}
         >
@@ -210,3 +209,190 @@ package.json -> "scripts"
 ```
 
 run `npm run start`
+
+##SCSS
+[sass-loader](https://webpack.js.org/loaders/sass-loader/)
+```
+npm i sass sass-loader style-loader css-loader -D
+```
+edit the webpack.config.js
+```
+ module: {
+    rules: [
+        {
+            test: /\.scss$/i,
+            use: [
+                // Creates `style` nodes from JS strings
+                'style-loader',
+                // Translates CSS into CommonJS
+                'css-loader',
+                // Compiles Sass to CSS
+                'sass-loader',
+            ],
+        },
+    ],
+},
+```
+Code
+src/components/Button/Button.scss
+```
+.Button {
+    background-color: darkorange;
+    border-radius: 5px;
+}
+```
+src/components/Button/Button.tsx
+```
+...
+import './Button.scss'
+...
+ // className="Button" 
+```
+restart devServer
+
+**CSS Bundle**
+
+[MiniCssExtractPlugin](https://webpack.js.org/plugins/mini-css-extract-plugin/)
+```
+npm i mini-css-extract-plugin -D
+```
+edit the webpack.config.js
+```
+...
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+...
+module: {
+    rules: [
+        {
+            test: /\.scss$/i,
+            use: [
+                // for dev
+                // Creates `style` nodes from JS strings
+                // 'style-loader',
+                // for prod
+                MiniCssExtractPlugin.loader,
+                // Translates CSS into CommonJS
+                'css-loader',
+                // Compiles Sass to CSS
+                'sass-loader',
+            ],
+        },
+    ],
+},
+...
+plugins: [
+    new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: '[name].css',
+        chunkFilename: '[id].css',
+    }),
+]
+```
+run `npm run build` and see the bundle app.css
+
+**Autoprefixer**
+
+```
+npm i postcss-loader autoprefixer -D
+```
+edit the webpack.config.js
+```
+...
+const autoprefixer = require('autoprefixer');
+...
+// insert after css-loader and before sass-loader
+{
+    loader: 'postcss-loader',
+    options: {
+        plugins: [
+            autoprefixer({}),
+        ],
+        sourceMap: true,
+    },
+},
+```
+create [.browserslistrc](https://github.com/browserslist/browserslist#browserslistrc)
+```
+defaults
+IE 8
+maintained node versions
+```
+edit src/components/Button/Button.scss
+```
+...
+user-select: none;
+```
+run `npm run build` and see prefixes in app.css bundle
+```
+-webkit-user-select: none;
+   -moz-user-select: none;
+    -ms-user-select: none;
+        user-select: none;
+``` 
+##Files
+
+[file-loader](https://webpack.js.org/loaders/file-loader/)
+
+```
+npm i file-loader -D
+```
+
+add files: 
+src/components/Button/assets/time.svg
+src/components/Button/assets/time.png
+modify src/components/Button/Button.scss
+```
+    background-image: url("./assets/time.svg");
+    background-repeat: no-repeat;
+```
+add [custom.d.ts](https://webpack.js.org/guides/typescript/#importing-other-assets)
+```
+declare module '*.svg' {
+    const value: any;
+    export default value;
+}
+
+declare module '*.jpg' {
+    const value: any;
+    export default value;
+}
+
+declare module '*.png' {
+    const value: any;
+    export default value;
+}
+
+```
+modify src/components/Button/Button.tsx
+```
+// <reference path="../../custom.d.ts"/>
+import TimePic from './assets/time.png';
+...
+ return (
+    <button
+        type="button"
+        className="Button"
+        onClick={onTitleClick}
+        style={styles}
+    >
+        {title}
+        <img src={TimePic} className="Title-Image" alt="" />
+    </button>
+ );
+```
+ edit the webpack.config.js
+```
+ module: {
+    rules: [
+        {
+            test: /\.(jpg|png|svg)$/,
+            loader: 'file-loader',
+            options: {
+                name: 'images/[sha512:hash:base64:7].[ext]',
+            },
+        },
+    ]
+}
+```
+run `npm run build` and see dist/images directory

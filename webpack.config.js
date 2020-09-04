@@ -1,5 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const autoprefixer = require('autoprefixer');
 
 module.exports = () => {
     return {
@@ -18,6 +20,33 @@ module.exports = () => {
                     use: 'ts-loader',
                     exclude: '/node_modules/',
                 },
+                {
+                    test: /\.scss$/i,
+                    use: [
+                        // dev
+                        // 'style-loader',
+                        // prod
+                        MiniCssExtractPlugin.loader,
+                        'css-loader',
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                plugins: [
+                                    autoprefixer({}),
+                                ],
+                                sourceMap: true,
+                            },
+                        },
+                        'sass-loader',
+                    ],
+                },
+                {
+                    test: /\.(jpg|png|svg)$/,
+                    loader: 'file-loader',
+                    options: {
+                        name: 'images/[sha512:hash:base64:7].[ext]',
+                    },
+                },
             ],
         },
         plugins: [
@@ -30,6 +59,12 @@ module.exports = () => {
                     useShortDoctype: true,
                 },
             }),
+            new MiniCssExtractPlugin({
+                // Options similar to the same options in webpackOptions.output
+                // both options are optional
+                filename: '[name].css',
+                chunkFilename: '[id].css',
+            })
         ],
         output: {
             filename: '[name].js',
