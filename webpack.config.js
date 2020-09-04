@@ -4,9 +4,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const StylelintPlugin = require('stylelint-webpack-plugin');
 
 module.exports = (options) => {
     const env = options || {};
+    // eslint-disable-next-line no-console
     console.log('Production: ', Boolean(env.production));
 
     return {
@@ -66,7 +68,16 @@ module.exports = (options) => {
                 // both options are optional
                 filename: '[name].css',
                 chunkFilename: '[id].css',
-            })
+            }),
+            new StylelintPlugin({
+                configFile: '.stylelintrc.js',
+                context: 'src',
+                files: '**/*.scss',
+                failOnError: false,
+                quiet: false,
+                emitErrors: true,
+                syntax: 'scss',
+            }),
         ],
         output: {
             filename: '[name].js',

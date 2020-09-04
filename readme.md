@@ -543,3 +543,57 @@ module.exports = {
 };
 ```
 run `eslint src/`
+###stylelint
+```
+npm i -D
+stylelint
+stylelint-config-airbnb
+stylelint-config-rational-order
+stylelint-config-recommended
+stylelint-order
+stylelint-scss
+stylelint-webpack-plugin
+```
+create .stylelintrc.js
+```
+module.exports = {
+    extends: [
+        'stylelint-config-recommended',
+        'stylelint-config-airbnb',
+        'stylelint-config-rational-order'
+    ],
+    plugins: [
+        'stylelint-scss',
+        'stylelint-order',
+    ],
+    rules: {
+        'color-no-invalid-hex': true,
+        indentation: 4,
+        'function-comma-space-after': 'always-single-line',
+        'color-named': 'never'
+    }
+};
+```
+edit the webpack.config.js
+```
+...
+const StylelintPlugin = require('stylelint-webpack-plugin');
+...
+plugins: [
+    new StylelintPlugin({
+        configFile: '.stylelintrc.js',
+        context: 'src',
+        files: '**/*.scss',
+        failOnError: false,
+        quiet: false,
+        emitErrors: true,
+        syntax: 'scss',
+    }),
+]
+```
+run `stylelint src/**/**.scss --syntax scss`
+add linters to package.json "scripts" section
+```
+    "eslint": "eslint src/",
+    "stylelint": "stylelint src/**/**.scss --syntax scss",
+```
