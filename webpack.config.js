@@ -2,8 +2,13 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-module.exports = () => {
+module.exports = (options) => {
+    const env = options || {};
+    console.log('Production: ', Boolean(env.production));
+
     return {
         mode: 'none',
         entry: {
@@ -23,10 +28,7 @@ module.exports = () => {
                 {
                     test: /\.scss$/i,
                     use: [
-                        // dev
-                        // 'style-loader',
-                        // prod
-                        MiniCssExtractPlugin.loader,
+                        env.production ? MiniCssExtractPlugin.loader : 'style-loader',
                         'css-loader',
                         {
                             loader: 'postcss-loader',
@@ -70,5 +72,18 @@ module.exports = () => {
             filename: '[name].js',
             path: path.resolve(__dirname, 'dist'),
         },
+        optimization: {
+            minimize: true,
+            minimizer: [
+                new CssMinimizerPlugin(),
+                new UglifyJsPlugin({
+                    sourceMap: true,
+                    extractComments: true,
+                }),
+            ],
+        },
+        devtool: env.production
+            ? 'source-map'
+            : 'eval',
     };
 };

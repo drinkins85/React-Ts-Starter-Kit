@@ -396,3 +396,72 @@ import TimePic from './assets/time.png';
 }
 ```
 run `npm run build` and see dist/images directory
+
+## Dev and Prod build
+
+Add [env variables](https://webpack.js.org/guides/environment-variables/) to webpack config 
+```
+...
+module.exports = (options) => {
+    const env = options || {};
+    console.log('Production: ', Boolean(env.production));
+    ...
+}
+```
+run `npm run build -- --env.production` and see `Production: true` message
+
+###css
+css bundle only for production
+edit the webpack.config.js
+```
+{
+    test: /\.scss$/i,
+    use: [
+        ...
+        env.production ? MiniCssExtractPlugin.loader : 'style-loader',
+        ...
+    ]
+}
+```
+[CssMinimizerPlugin](https://webpack.js.org/plugins/css-minimizer-webpack-plugin/)
+```
+npm i  css-minimizer-webpack-plugin -D
+```
+edit the webpack.config.js
+```
+...
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+...
+optimization: {
+    minimize: true,
+    minimizer: [new CssMinimizerPlugin()],
+  },
+```
+run `npm run build -- --env.production` and see minimized app.css bundle
+###JS
+[UglifyJsPlugin](https://webpack.js.org/plugins/uglifyjs-webpack-plugin/)
+```
+npm i uglifyjs-webpack-plugin -D
+```
+edit the webpack.config.js
+```
+...
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+...
+optimization: {
+    minimizer [
+        new UglifyJsPlugin({
+            sourceMap: true,
+            extractComments: true,
+        }),
+    ]
+}
+```
+run `npm run build -- --env.production` and see minimized app.js bundle
+
+[SourceMaps](https://webpack.js.org/configuration/devtool/)
+
+edit the webpack.config.js
+```
+devtool: env.production ? 'source-map' : 'eval',
+```
