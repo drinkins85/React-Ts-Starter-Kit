@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './Button.scss'
+import './Button.scss';
 import TimePic from './assets/time.png';
 
 type TitleProps = {
@@ -10,6 +10,7 @@ type TitleProps = {
 
 function Button({ title, color, size }: TitleProps): JSX.Element {
     const onTitleClick = () => {
+        // eslint-disable-next-line no-console
         console.log('test');
     };
 
