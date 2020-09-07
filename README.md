@@ -693,3 +693,97 @@ edit package.json
     }
 },
 ```
+##[Storybook](https://storybook.js.org/docs/react/get-started/install)
+```
+npx sb init
+npm i core-js -D
+```
+[SCSS preset for Storybook](https://github.com/storybookjs/presets/tree/master/packages/preset-scss)
+```
+npm i @storybook/preset-scss -D
+```
+Then add the following to .storybook/main.js:
+```
+addons: [
+    '@storybook/preset-scss'
+],
+```
+run `npm run storybook` and see http://localhost:6006
+
+if you get [error](https://github.com/storybookjs/storybook/issues/7386) on Windows:
+```
+events.js:292
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: spawn powershell ENOENT
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:267:19)
+    at onErrorNT (internal/child_process.js:469:16)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21)
+Emitted 'error' event on ChildProcess instance at:
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:273:12)
+    at onErrorNT (internal/child_process.js:469:16)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21) {
+  errno: 'ENOENT',
+  code: 'ENOENT',
+  syscall: 'spawn powershell',
+  path: 'powershell',
+  spawnargs: [
+    '-NoProfile',
+    '-NonInteractive',
+    '–ExecutionPolicy',
+    'Bypass',
+    '-EncodedCommand',
+    'UwB0AGEAcgB0ACAAIgBgACIAaAB0AHQAcAA6AC8ALwBsAG8AYwBhAGwAaABvAHMAdAA6ADYAMAAwADYALwBgACIAIgA='
+  ]
+}
+```
+install [cross-env](https://www.npmjs.com/package/cross-env)
+```
+npm i cross-env -D
+```
+edit package.json: 
+```
+"scripts" {
+    "storybook": "cross-env BROWSER=none start-storybook -p 6006"
+}
+
+```
+### Add stories
+remove dir with examples `./stories`
+install [controls addon](https://github.com/storybookjs/storybook/blob/next/addons/controls/README.md#writing-stories) 
+```
+npm i @storybook/addon-controls -D
+```
+edit .storybook/main.js:
+```
+"addons": [
+    "@storybook/addon-controls"
+  ]
+```
+Create src/components/Button/Button.stories.tsx
+```
+import * as React from 'react';
+import Button from './Button';
+
+export default {
+    title: 'Button',
+    component: Button,
+    argTypes: {
+        color: { control: 'color' },
+        size: {
+            control: {
+                type: 'range',
+                min: 6,
+                max: 50,
+            },
+        },
+    },
+};
+
+export const Base = (args) => <Button {...args} />;
+Base.args = {
+    title: 'test',
+};
+```
+and run `npm run storybook`
