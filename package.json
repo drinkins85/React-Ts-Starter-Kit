@@ -8,7 +8,31 @@
     "start": "webpack-dev-server",
     "stylelint": "stylelint src/**/**.scss --syntax scss",
     "eslint": "eslint src/",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
+  },
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/test-setup.js"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test-file-mock.js"
+    },
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest",
+      ".+\\.(css|styl|less|sass|scss)$": "jest-css-modules-transform"
+    },
+    "testMatch": [
+      "**/__tests__/*.(ts|tsx|js)"
+    ],
+    "reporters": [
+      "default",
+      "jest-html-reporters"
+    ]
   },
   "keywords": [
     "React",
@@ -20,12 +44,16 @@
   "author": "Akhryapov Andrew",
   "license": "ISC",
   "devDependencies": {
+    "@types/enzyme": "^3.10.5",
+    "@types/jest": "^26.0.13",
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
     "@types/webpack": "^4.41.21",
     "autoprefixer": "^9.8.6",
     "css-loader": "^4.2.2",
     "css-minimizer-webpack-plugin": "^1.1.3",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.4",
     "eslint": "^7.8.1",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-plugin-import": "^2.22.0",
@@ -33,8 +61,13 @@
     "eslint-plugin-react": "^7.20.6",
     "file-loader": "^6.1.0",
     "html-webpack-plugin": "^4.4.1",
+    "jest": "^26.4.2",
+    "jest-css-modules-transform": "^4.0.1",
+    "jest-html-reporters": "^2.0.3",
     "mini-css-extract-plugin": "^0.11.0",
+    "node-sass": "^4.14.1",
     "postcss-loader": "^3.0.0",
+    "react-test-renderer": "^16.13.1",
     "sass": "^1.26.10",
     "sass-loader": "^10.0.1",
     "style-loader": "^1.2.1",
@@ -45,6 +78,7 @@
     "stylelint-order": "^4.1.0",
     "stylelint-scss": "^3.18.0",
     "stylelint-webpack-plugin": "^2.1.0",
+    "ts-jest": "^26.3.0",
     "ts-loader": "^8.0.3",
     "typescript": "^4.0.2",
     "uglifyjs-webpack-plugin": "^2.2.0",

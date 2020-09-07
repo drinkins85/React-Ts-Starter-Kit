@@ -597,3 +597,83 @@ add linters to package.json "scripts" section
     "eslint": "eslint src/",
     "stylelint": "stylelint src/**/**.scss --syntax scss",
 ```
+##Jest
+```
+npm i -D jest enzyme enzyme-adapter-react-16 react-test-renderer jest-css-modules-transform ts-jest node-sass @types/jest @types/enzyme
+```
+create [test-setup.js](https://enzymejs.github.io/enzyme/docs/installation/#working-with-react-16)
+```
+/**
+ * Defines the React 16 Adapter for Enzyme.
+ *
+ * @link http://airbnb.io/enzyme/docs/installation/#working-with-react-16
+ * @copyright 2017 Airbnb, Inc.
+ */
+const enzyme = require('enzyme');
+const Adapter = require('enzyme-adapter-react-16');
+
+enzyme.configure({ adapter: new Adapter() });
+```
+create [test-file-mock.js](https://jestjs.io/docs/ru/next/webpack#%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D1%81%D1%82%D0%B0%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D1%85-%D0%B0%D0%BA%D1%82%D0%B8%D0%B2%D0%BE%D0%B2)
+```
+module.exports = 'test-file-stub';
+```
+edit package.json
+```
+"jest": {
+    "setupFiles": [
+      "<rootDir>/test-setup.js"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test-file-mock.js"
+    },
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest",
+      ".+\\.(css|styl|less|sass|scss)$": "jest-css-modules-transform"
+    },
+    "testMatch": [
+      "**/__tests__/*.(ts|tsx|js)"
+    ],
+  },
+```
+create src/components/Button/__tests__/Button.spec.tsx
+```
+/// <reference types="jest" />
+import * as React from 'react';
+import { render } from 'enzyme';
+import Button from '../Button';
+
+it('show Button', () => {
+    const title = 'test';
+    const result = render(<Button title={title} />);
+
+    expect(result).toMatchSnapshot();
+});
+```
+edit package.json
+```
+"scripts": {
+  "test": "jest",
+}
+```
+run `npm run test`
+### test report
+```
+npm i jest-html-reporters -D
+```
+edit package.json
+```
+"jest": {
+ ...
+ "reporters": [
+      "default",
+      "jest-html-reporters"
+    ]
+}
+```
+run `npm run test`
