@@ -677,3 +677,19 @@ edit package.json
 }
 ```
 run `npm run test`
+##Hooks
+```
+npm i husky -D 
+```
+edit package.json
+```
+"scripts": {
+   "checks": "npm run stylelint && npm run eslint && npm run test",
+},
+"husky": {
+    "hooks": {
+      "pre-commit": "npm run checks",
+      "pre-push": "npm run checks"
+    }
+},
+```

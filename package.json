@@ -8,7 +8,14 @@
     "start": "webpack-dev-server",
     "stylelint": "stylelint src/**/**.scss --syntax scss",
     "eslint": "eslint src/",
-    "test": "jest"
+    "test": "jest",
+    "checks": "npm run stylelint && npm run eslint && npm run test"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run checks",
+      "pre-push": "npm run checks"
+    }
   },
   "jest": {
     "setupFiles": [
@@ -61,6 +68,7 @@
     "eslint-plugin-react": "^7.20.6",
     "file-loader": "^6.1.0",
     "html-webpack-plugin": "^4.4.1",
+    "husky": "^4.3.0",
     "jest": "^26.4.2",
     "jest-css-modules-transform": "^4.0.1",
     "jest-html-reporters": "^2.0.3",
