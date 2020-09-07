@@ -210,7 +210,8 @@ package.json -> "scripts"
 
 run `npm run start`
 
-##SCSS
+## SCSS
+
 [sass-loader](https://webpack.js.org/loaders/sass-loader/)
 ```
 npm i sass sass-loader style-loader css-loader -D
@@ -246,7 +247,7 @@ src/components/Button/Button.tsx
 ...
 import './Button.scss'
 ...
- // className="Button" 
+className="Button" 
 ```
 restart devServer
 
@@ -330,7 +331,7 @@ run `npm run build` and see prefixes in app.css bundle
     -ms-user-select: none;
         user-select: none;
 ``` 
-##Files
+## Files
 
 [file-loader](https://webpack.js.org/loaders/file-loader/)
 
@@ -410,7 +411,7 @@ module.exports = (options) => {
 ```
 run `npm run build -- --env.production` and see `Production: true` message
 
-###css
+### css
 css bundle only for production
 edit the webpack.config.js
 ```
@@ -425,7 +426,7 @@ edit the webpack.config.js
 ```
 [CssMinimizerPlugin](https://webpack.js.org/plugins/css-minimizer-webpack-plugin/)
 ```
-npm i  css-minimizer-webpack-plugin -D
+npm i css-minimizer-webpack-plugin -D
 ```
 edit the webpack.config.js
 ```
@@ -438,7 +439,7 @@ optimization: {
   },
 ```
 run `npm run build -- --env.production` and see minimized app.css bundle
-###JS
+### JS
 [UglifyJsPlugin](https://webpack.js.org/plugins/uglifyjs-webpack-plugin/)
 ```
 npm i uglifyjs-webpack-plugin -D
@@ -465,17 +466,10 @@ edit the webpack.config.js
 ```
 devtool: env.production ? 'source-map' : 'eval',
 ```
-##Linters
-###eslint
+## Linters
+### eslint
 ```
-npm install -D
-eslint 
-eslint-config-airbnb
-eslint-plugin-import
-eslint-plugin-jsx-a11y
-eslint-plugin-react
-@typescript-eslint/eslint-plugin
-@typescript-eslint/parser
+npm install -D eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-react @typescript-eslint/eslint-plugin @typescript-eslint/parser
 ```
 create .eslintrc.js
 ```
@@ -543,16 +537,9 @@ module.exports = {
 };
 ```
 run `eslint src/`
-###stylelint
+### stylelint
 ```
-npm i -D
-stylelint
-stylelint-config-airbnb
-stylelint-config-rational-order
-stylelint-config-recommended
-stylelint-order
-stylelint-scss
-stylelint-webpack-plugin
+npm i -D stylelint stylelint-config-airbnb stylelint-config-rational-order stylelint-config-recommended stylelint-order stylelint-scss stylelint-webpack-plugin
 ```
 create .stylelintrc.js
 ```
@@ -597,7 +584,7 @@ add linters to package.json "scripts" section
     "eslint": "eslint src/",
     "stylelint": "stylelint src/**/**.scss --syntax scss",
 ```
-##Jest
+## Jest
 ```
 npm i -D jest enzyme enzyme-adapter-react-16 react-test-renderer jest-css-modules-transform ts-jest node-sass @types/jest @types/enzyme
 ```
@@ -677,7 +664,7 @@ edit package.json
 }
 ```
 run `npm run test`
-##Hooks
+## Hooks
 ```
 npm i husky -D 
 ```
@@ -693,7 +680,8 @@ edit package.json
     }
 },
 ```
-##[Storybook](https://storybook.js.org/docs/react/get-started/install)
+## Storybook
+[install Storybook](https://storybook.js.org/docs/react/get-started/install)
 ```
 npx sb init
 npm i core-js -D
@@ -751,6 +739,7 @@ edit package.json:
 ```
 ### Add stories
 remove dir with examples `./stories`
+
 install [controls addon](https://github.com/storybookjs/storybook/blob/next/addons/controls/README.md#writing-stories) 
 ```
 npm i @storybook/addon-controls -D
